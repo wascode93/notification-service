@@ -3,7 +3,7 @@ package com.swvl.challenge.notification.schedulers;
 import com.swvl.challenge.notification.models.Notification;
 import com.swvl.challenge.notification.models.SmsNotification;
 import com.swvl.challenge.notification.models.User;
-import com.swvl.challenge.notification.providers.SmsSendStrategy;
+import com.swvl.challenge.notification.providers.SmsNotificationSendStrategy;
 import com.swvl.challenge.notification.services.SmsNotificationService;
 import com.swvl.challenge.notification.services.UserService;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -12,19 +12,19 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class SmsScheduler {
+public class SmsNotificationScheduler {
 
-  private final int SMS_PROVIDER_LIMIT_PER_MINUTE = 30;
+  private final int PROVIDER_LIMIT_PER_MINUTE = 30;
   private final SmsNotificationService smsNotificationService;
-  private final SmsSendStrategy smsSendStrategy;
+  private final SmsNotificationSendStrategy smsNotificationSendStrategy;
   private final UserService userService;
 
-  public SmsScheduler(
-          SmsNotificationService smsNotificationService,
-          SmsSendStrategy smsSendStrategy,
-          UserService userService) {
+  public SmsNotificationScheduler(
+      SmsNotificationService smsNotificationService,
+      SmsNotificationSendStrategy smsNotificationSendStrategy,
+      UserService userService) {
     this.smsNotificationService = smsNotificationService;
-    this.smsSendStrategy = smsSendStrategy;
+    this.smsNotificationSendStrategy = smsNotificationSendStrategy;
     this.userService = userService;
   }
 
@@ -36,14 +36,13 @@ public class SmsScheduler {
   }
 
   private List<SmsNotification> getNotifications() {
-    return smsNotificationService.getAllPendingNotificationsByLimit(
-        SMS_PROVIDER_LIMIT_PER_MINUTE);
+    return smsNotificationService.getAllPendingNotificationsByLimit(PROVIDER_LIMIT_PER_MINUTE);
   }
 
   private void sendNotifications(List<SmsNotification> notifications) {
     for (Notification notification : notifications) {
       User user = userService.findUserById(notification.getUserId());
-      smsSendStrategy.send(user.getNumber(), notification.getMessage());
+      smsNotificationSendStrategy.send(user.getNumber(), notification.getMessage());
       notification.setSent(true);
     }
   }
