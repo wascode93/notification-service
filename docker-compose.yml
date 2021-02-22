@@ -1,0 +1,21 @@
+version: '3'
+services:
+  service:
+    image: 'notification-spring:latest'
+    build:
+      context: .
+      dockerfile: springDockerfile
+    ports:
+      - 8080:8080
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/notification
+    depends_on:
+      - database
+
+  database:
+    image: 'postgres:9.6'
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=notification
+      - POSTGRES_PASSWORD=pgpassword
