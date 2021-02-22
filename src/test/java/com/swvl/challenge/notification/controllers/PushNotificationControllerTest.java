@@ -78,7 +78,7 @@ public class PushNotificationControllerTest {
   }
 
   @Test
-  @DisplayName("POST /api/v1/push/{userId} Read user's push notifications")
+  @DisplayName("GET /api/v1/push/{userId} Read user's push notifications")
   public void testReadUserNotifications() throws Exception {
     // arrange
     Long userId = 2L;
