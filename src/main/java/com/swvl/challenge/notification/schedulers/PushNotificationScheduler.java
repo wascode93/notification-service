@@ -42,7 +42,7 @@ public class PushNotificationScheduler {
   private void sendNotifications(List<PushNotification> notifications) {
     for (Notification notification : notifications) {
       User user = userService.findUserById(notification.getUserId());
-      pushNotificationSendStrategy.send(user.getNumber(), notification.getMessage());
+      pushNotificationSendStrategy.send(user.getToken(), notification.getMessage());
       notification.setSent(true);
     }
   }
