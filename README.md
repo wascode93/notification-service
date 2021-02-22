@@ -1,6 +1,6 @@
 # Notification Service
 
-## About
+### About
 
 Notification restful web service responsible for sending notifications to customers.
 * Exposes endpoints for saving notifications
@@ -8,15 +8,15 @@ Notification restful web service responsible for sending notifications to custom
 > Note:
 > * Notification types are Sms, Email and Push
 
-## API Documentation
+### API Documentation
 
 * Open http://localhost:8080/swagger-ui.html
 
-## ERD
+### ERD
 
 ![alt text](ERD.png "Notification ERD")
 
-## Installation
+### Installation
 
 1. ```shell
    git clone https://github.com/wascode93/notification-service.git
