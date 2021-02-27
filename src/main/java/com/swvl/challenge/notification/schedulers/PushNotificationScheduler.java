@@ -3,9 +3,10 @@ package com.swvl.challenge.notification.schedulers;
 import com.swvl.challenge.notification.models.Notification;
 import com.swvl.challenge.notification.models.PushNotification;
 import com.swvl.challenge.notification.models.User;
-import com.swvl.challenge.notification.providers.PushNotificationSendStrategy;
+import com.swvl.challenge.notification.providers.INotificationSendStrategy;
 import com.swvl.challenge.notification.services.PushNotificationService;
 import com.swvl.challenge.notification.services.UserService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -16,15 +17,15 @@ public class PushNotificationScheduler {
 
   private final int PROVIDER_LIMIT_PER_MINUTE = 30;
   private final PushNotificationService pushNotificationService;
-  private final PushNotificationSendStrategy pushNotificationSendStrategy;
+  private final INotificationSendStrategy notificationSendStrategy;
   private final UserService userService;
 
   public PushNotificationScheduler(
-          PushNotificationService pushNotificationService,
-          PushNotificationSendStrategy pushNotificationSendStrategy,
-          UserService userService) {
+      PushNotificationService pushNotificationService,
+      @Qualifier("pushNotificationSendStrategy") INotificationSendStrategy notificationSendStrategy,
+      UserService userService) {
     this.pushNotificationService = pushNotificationService;
-    this.pushNotificationSendStrategy = pushNotificationSendStrategy;
+    this.notificationSendStrategy = notificationSendStrategy;
     this.userService = userService;
   }
 
@@ -42,7 +43,7 @@ public class PushNotificationScheduler {
   private void sendNotifications(List<PushNotification> notifications) {
     for (Notification notification : notifications) {
       User user = userService.findUserById(notification.getUserId());
-      pushNotificationSendStrategy.send(user.getToken(), notification.getMessage());
+      notificationSendStrategy.send(user.getToken(), notification.getMessage());
       notification.setSent(true);
     }
   }
