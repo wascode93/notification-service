@@ -6,6 +6,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface EmailNotificationRepository extends JpaRepository<EmailNotification, Long> {
-  List<EmailNotification> findAllBySentIsFalse(Pageable page);
-}
+public interface EmailNotificationRepository extends NotificationRepository<EmailNotification> {}
