@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class EmailNotificationSendStrategy implements INotificationSendStrategy {
 
-  private final Logger logger = LoggerFactory.getLogger(PushNotificationSendStrategy.class);
+  private final Logger logger = LoggerFactory.getLogger(EmailNotificationSendStrategy.class);
   private final JavaMailSender mailSender;
 
   public EmailNotificationSendStrategy(JavaMailSender mailSender) {
